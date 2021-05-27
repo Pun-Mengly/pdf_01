@@ -1,49 +1,78 @@
+import 'dart:core';
 import 'dart:io';
 
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-
-class User {
-  final String name;
-  final int age;
-  final String statue;
-
-  const User({this.name, this.age, this.statue});
-}
+import 'package:pdf_01/data/data_item.dart';
+import 'package:pdf_01/model/invoice.dart';
 
 //This class for UI Output
 class PdfApi {
   static Future<File> generateTable() async {
     final pdf = Document();
 
-    final headers = ['Name', 'Age', 'Statues'];
-    final users = [
-      User(name: 'Mengly', age: 20, statue: 'Single'),
-      User(name: 'Mengly', age: 20, statue: 'Single'),
-      User(name: 'Mengly', age: 20, statue: 'Single'),
-      User(name: 'Mengly', age: 20, statue: 'Single'),
-      User(name: 'Mengly', age: 20, statue: 'Single'),
-      User(name: 'Mengly', age: 20, statue: 'Single'),
-      User(name: 'Mengly', age: 20, statue: 'Single'),
-    ];
-    final data =
-        users.map((user) => [user.name, user.age, user.statue]).toList();
+    final headers = ['Description', 'Size', 'Qty', 'Amount'];
+
+    invoice;
+    final data = invoice
+        .map(
+            (user) => [user.description, user.size, user.quantity, user.amount])
+        .toList();
 
     pdf.addPage(Page(
         pageFormat: PdfPageFormat.a5,
         build: (Context context) {
           return Container(
-              child: Column(children: [
-            Text("Hello PDF"),
-            SizedBox(height: 10),
-            Table.fromTextArray(headers: headers, data: data)
-          ])); // Center
+            alignment: Alignment.topLeft,
+            child: Column(children: [
+              Text("Invoice".toUpperCase(),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+              SizedBox(height: 10),
+              Table.fromTextArray(
+                  headers: headers,
+                  data: data,
+                  border: null,
+                  headerDecoration: BoxDecoration(color: PdfColors.grey300),
+                  headerStyle: TextStyle(fontWeight: FontWeight.bold),
+                  cellHeight: 30,
+                  cellAlignments: {
+                    0: Alignment.centerLeft,
+                    1: Alignment.centerRight,
+                    2: Alignment.centerRight,
+                    3: Alignment.centerRight
+                  }),
+              Container(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                    Divider(),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Sub Total'),
+                          Text(_total().toString(),
+                              style: TextStyle(fontWeight: FontWeight.bold))
+                        ]),
+                    SizedBox(height: 7),
+                    Row(children: [
+                      Text('VAT'),
+                      SizedBox(width: 180),
+                      Text('0%'),
+                    ]),
+                    SizedBox(height: 7),
+                    Divider(),
+                    Text('Grand Total (R) '),
+                    SizedBox(height: 7),
+                    Text('Grand Total (D)'),
+                  ]))
+            ]),
+          ); // Center
         })); //
-    // final image = MemoryImage(
-    //   File('assets/images/Atech.png').readAsBytesSync(),
-    // );
+
+    // final image = await imageFromAssetBundle('assets/image.png');
     //
     // pdf.addPage(Page(build: (Context context) {
     //   return Center(
@@ -54,6 +83,7 @@ class PdfApi {
     return saveDocument(name: 'my_example.pdf', pdf: pdf);
   }
 
+  static Widget MM() {}
   static Future<File> saveDocument({String name, Document pdf}) async {
     final bytes = await pdf.save();
     final dir = await getApplicationDocumentsDirectory();
@@ -65,5 +95,17 @@ class PdfApi {
   static Future openFile(File file) async {
     final url = file.path;
     await OpenFile.open(url);
+  }
+
+  static Widget buildFooter(InvoiceItem invoice) => Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Divider(),
+          Text('Thank you for coming. Please come again!!')
+        ],
+      );
+  // sum amount without vat
+  static double _total() {
+    return 1000;
   }
 }
