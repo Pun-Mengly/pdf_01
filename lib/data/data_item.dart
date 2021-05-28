@@ -2,39 +2,33 @@ import 'package:pdf_01/model/invoice.dart';
 
 final invoice = [
   InvoiceItem(
-    description: 'MMM',
+    description: 'Coca_Cola',
     size: 'Small',
     quantity: 2,
-    amount: 20,
+    amount: 10,
   ),
   InvoiceItem(
-    description: 'MMM',
-    size: 'Small',
-    quantity: 2,
-    amount: 20,
+    description: 'Fried rice',
+    size: 'Medium',
+    quantity: 1,
+    amount: 15,
   ),
   InvoiceItem(
-    description: 'MMM',
-    size: 'Small',
+    description: 'Coffee',
+    size: 'Big',
     quantity: 2,
-    amount: 20,
+    amount: 9,
   ),
   InvoiceItem(
-    description: 'MMM',
+    description: 'Milk',
     size: 'Small',
-    quantity: 2,
-    amount: 20,
+    quantity: 5,
+    amount: 17,
   ),
   InvoiceItem(
-    description: 'MMM',
-    size: 'Small',
-    quantity: 2,
-    amount: 20,
+    description: 'Salad',
+    size: 'Medium',
+    quantity: 1,
+    amount: 4,
   ),
-  InvoiceItem(
-    description: 'MMM',
-    size: 'Small',
-    quantity: 2,
-    amount: 20,
-  )
 ];
